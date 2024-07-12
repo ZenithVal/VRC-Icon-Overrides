@@ -31,16 +31,33 @@ public class VRCIconOverrides : MonoBehaviour
             ("VRCScaleConstraint", Resources.Load<Texture2D>("VRC_ScaleConstraint Icon"))
         };
 
-        foreach (var icon in icons)
+        var previewRenderUtility = new PreviewRenderUtility();
+        try
         {
-            var type = GetTypeByName(icon.typeName);
-            if (type != null)
-            {
-                EditorGUIUtility.SetIconForObject(new GameObject(icon.typeName).AddComponent(type), icon.icon);
-                DestroyImmediate(GameObject.Find(icon.typeName));
+            var assetPath = AssetDatabase.GUIDToAssetPath("e0c36ee579935424ea1c7f55c4dfc91e");
+            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
+            var go = previewRenderUtility.InstantiatePrefabInScene(prefab);
 
-                //if someone has a way of doing this that doesn't involve creating a gameobject, please let me know
+            foreach (var icon in icons)
+            {
+                var type = GetTypeByName(icon.typeName);
+                if (type != null)
+                {
+                    EditorGUIUtility.SetIconForObject(go.AddComponent(type), icon.icon);
+                    DestroyImmediate(go.GetComponent(type)); 
+
+                    //if someone has an easy way of doing this that doesn't involve creating a gameobject, please let me know
+                }
             }
+            Debug.Log("VRC Icon Overrides: Icons successfully overridden.");
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("VRC Icon Overrides: Failed to override icons: " + e.Message);
+        }
+        finally
+        {
+            previewRenderUtility.Cleanup();
         }
     }
 
