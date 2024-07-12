@@ -1,4 +1,3 @@
-
 #if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
@@ -16,6 +15,14 @@ public class VRCIconOverrides : MonoBehaviour
         // Define the type of the components and the icons
         var icons = new (string typeName, Texture2D icon)[]
         {
+            ("VRCAvatarDescriptor", EditorGUIUtility.IconContent("Avatar Icon").image as Texture2D),
+
+            ("VRCContactSender", EditorGUIUtility.IconContent("sv_icon_dot4_pix16_gizmo").image as Texture2D),
+            ("VRCContactReceiver", EditorGUIUtility.IconContent("sv_icon_dot1_pix16_gizmo").image as Texture2D),
+
+            ("VRCPhysBone", Resources.Load<Texture2D>("VRC_Physbone Icon")),
+            ("VRCPhysBoneCollider", Resources.Load<Texture2D>("VRC_PhysboneCollider Icon")),
+
             ("VRCAimConstraint", Resources.Load<Texture2D>("VRC_AimConstraint Icon")),
             ("VRCLookAtConstraint", Resources.Load<Texture2D>("VRC_LookAtConstraint Icon")),
             ("VRCParentConstraint", Resources.Load<Texture2D>("VRC_ParentConstraint Icon")),
@@ -30,6 +37,9 @@ public class VRCIconOverrides : MonoBehaviour
             if (type != null)
             {
                 EditorGUIUtility.SetIconForObject(new GameObject(icon.typeName).AddComponent(type), icon.icon);
+                DestroyImmediate(GameObject.Find(icon.typeName));
+
+                //if someone has a way of doing this that doesn't involve creating a gameobject, please let me know
             }
         }
     }
