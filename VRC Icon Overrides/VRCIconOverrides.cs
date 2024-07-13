@@ -2,14 +2,9 @@
 using UnityEngine;
 using UnityEditor;
 
-[InitializeOnLoad]
 public class VRCIconOverrides : MonoBehaviour
 {
-    static VRCIconOverrides()
-    {
-        OverrideIcons();
-    }
-
+    [InitializeOnLoadMethod]
     private static void OverrideIcons()
     {
         // Define the type of the components and the icons
@@ -34,9 +29,8 @@ public class VRCIconOverrides : MonoBehaviour
         var previewRenderUtility = new PreviewRenderUtility();
         try
         {
-            var assetPath = AssetDatabase.GUIDToAssetPath("e0c36ee579935424ea1c7f55c4dfc91e");
-            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
-            var go = previewRenderUtility.InstantiatePrefabInScene(prefab);
+            var go = new GameObject("VRCIconOverrides");
+            previewRenderUtility.AddSingleGO(go);
 
             foreach (var icon in icons)
             {
